@@ -1,68 +1,224 @@
 ﻿@model MvcMovie.Models.Movie
+    
 
-@{
-    ViewData[""] = "Create";
-}
 
-<h1>Create</h1>
+    @{
+        ViewData[""] = "Create";
+    }
 
-<h4>Movie</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Rating" class="control-label"></label>
-                <input asp-for="Rating" class="form-control" />
-                <span asp-validation-for="Rating" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ReleaseDate" class="control-label"></label>
-                <input asp-for="ReleaseDate" class="form-control" />
-                <span asp-validation-for="ReleaseDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Genre" class="control-label"></label>
-                <input asp-for="Genre" class="form-control" />
-                <span asp-validation-for="Genre" class="text-danger"></span>
+    <h1>Create</h1>
+
+    <h4>Movie</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="ReleaseDate" class="control-label"></label>
+                    <input asp-for="ReleaseDate" class="form-control" />
+                    <span asp-validation-for="ReleaseDate" class="text-danger"></span>
+                </div>
 
 
 
+                <div class="form-group">
+                    <label asp-for="District" class="control-label"></label>
+                    <input asp-for="District" class="form-control" />
+                    <span asp-validation-for="District" class="text-danger"></span>
+
+                    @*///////////////
+
             </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Floor" class="control-label"></label>
-                <input asp-for="Floor" class="form-control" />
-                <span asp-validation-for="Floor" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Floor" class="custom-control-inline"></label>
-                <input asp-for="Floor" class="text-break" />
-                <span asp-validation-for="Floor" class="text-danger"></span>
-            </div>
+            <div class="form-group col-md-8">
+                @*<label for="inputState">Область</label>*@
+                    <select id="inputState" class="form-control">
+                        <option selected>Метро...</option>
+                        <option>Житомирская</option>
+                        <option>Академгородок</option>
+                        <option>Святошино</option>
+                        <option>Нивки</option>
+
+                    </select>
+                </div>
 
 
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+
+
+
+
+                <div class="form-row">
+                    <div class="col-10">
+                        <input asp-for="Title" type="text" class="form-control" placeholder="Улица">
+                    </div>
+                    <div class="col">
+                        <input asp-for="Nstreat" type="text" class="form-control" placeholder="№">
+                    </div>
+
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+                @*<div class="form-group">
+
+            <label asp-for="Rating" class="control-label"></label>
+            <input asp-for="Rating" class="form-control" />
+            <span asp-validation-for="Rating" class="text-danger"></span>
+        </div>*@
+
+
+                @*<div class="btn-group" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-secondary">Смежная</button>
+            <button type="button" class="btn btn-secondary">СмежноРаздельная</button>
+            <button type="button" class="btn btn-secondary">Ращдельная</button>
+            <button type="button" class="btn btn-secondary">Студия</button>
+            <span </span>
+        </div>*@
+
+                <div class="form-row">
+
+                    <div class="form-group col-md-5 ">
+
+                        <label asp-for="Rating" class="control-label"></label>
+                        <input asp-for="Rating" class="form-control" />
+                        <span asp-validation-for="Rating" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group col-md-5">
+                        <label for="inputState">Планировка</label>
+                        <select id="inputState" class="form-control">
+                            <option selected>Выбрать...</option>
+                            <option>Смежная</option>
+                            <option>СмежноРаздельная</option>
+                            <option>Раздельная</option>
+                            <option>Студия</option>
+                        </select>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+                <div class="form-row">
+                    <div class="col-4">
+                        <input asp-for="Qf" type="text" class="form-control" placeholder="Площадь">
+
+                    </div>
+
+                </div>
+
+
+
+
+                <div class="form-row">
+
+                    <div class="col-4">
+                        <input asp-for="Floor" type="text" class="form-control" placeholder="Этаж">
+                    </div>
+                    <div class="col-4">
+                        <input asp-for="Floors" type="text" class="form-control" placeholder="Э-ность">
+                    </div>
+
+                </div>
+
+
+
+                <div class="form-group">
+                    <label asp-for="Price" class="control-label"></label>
+                    <input asp-for="Price" class="form-control" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="About">Описание:</label>
+                    <input asp-for="About" textarea class="form-control" />
+
+
+                    <span asp-validation-for="About" class="text-danger"></span>
+                    @*<textarea class="form-control" rows="5" </textarea>*@
+
+                    @*<textarea class="form-control" rows="5" id="About"></textarea>*@
+                </div>
+
+
+
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="FonNamber" class="control-label"></label>
+                    <input asp-for="FonNamber" class="form-control" />
+                    <span asp-validation-for="FonNamber" class="text-danger"></span>
+
+
+
+
+                </div>
+                
+
+                <div class="form-group">
+                    <label asp-for="Foto" class="control-label"></label>
+                    <input asp-for="Foto" type="file" multiple>
+                    <span asp-validation-for="Foto" class="text-danger"></span>
+                </div>
+
+                @*<dt>
+            <label asp-for="Foto"></label>
+        </dt>
+        <dd>
+            <input asp-for="Foto" type="file">
+        </dd>*@
+
+
+
+                @*<p>
+            <label>Фото</label>
+            <input name="Foto" , type="file" ,class="form-control" />
+
+        </p>
+
+        <div class="form-control>
+            <label asp-for="Foto"></label>
+
+
+            <input asp-for="Foto" type="file">
+            </dd>*@
+
+
+                @*<div class="col-md-10">
+            <input type="file" id="Foto" name="upload" />
+        </div>*@
+
+
+
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+
+
+
+            </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }

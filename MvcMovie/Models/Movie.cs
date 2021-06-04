@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MvcMovie.Models
 {
@@ -23,23 +24,23 @@ namespace MvcMovie.Models
         [Required(ErrorMessage = "you need enter Titel")]
         public string Title { get; set; }
 
-       // public int score { get; set; }
+        // public int score { get; set; }
 
         [DataType(DataType.Date)]
-        
+
         public DateTime ReleaseDate { get; set; }
-        
-        
-        [Display(Name = "Ganre")]
-        [Required(ErrorMessage = "you need enter Ganre")]
-       // [RegularExpression(@"^[A-Z]+[a-zA-Z]*$")]
-        
+
+
+        [Display(Name = "District")]
+        [Required(ErrorMessage = "you need enter District")]
+        // [RegularExpression(@"^[A-Z]+[a-zA-Z]*$")]
+
         [StringLength(30)]
 
-        public string Genre { get; set; }
+        public string District { get; set; }
         //[Column(TypeName = "decimal(18000, 2)")]
 
-
+        public string Ganre { get; set; }
         //[DataType(DataType.Currency)]
         public int Price { get; set; }
 
@@ -50,15 +51,36 @@ namespace MvcMovie.Models
         [Required]
         public string Rating { get; set; }
 
-       public int Floor { get; set; }
 
-       //public int FonNamber { get; set; }
-
-       //public string About { get; set; }
-      // public string Nstreat { get; set; }
+        public int Qf { get; set; }
+        public int Floor { get; set; }
+        public int Floors { get; set; }
 
 
-       // public IFormFile Avatar { get; set; }
+
+        public string FonNamber { get; set; }
+
+
+        public string Name { get; set; }
+
+        public string About { get; set; }
+
+        public string GK { get; set; }
+        public string Nstreat { get; set; }
+
+
+
+
+
+        public byte[] Foto { get; set; }
+        public byte[] Foto1 { get; set; }
+
+        public byte[] Foto2 { get; set; }
+
+        // public byte[]
+
+        // public IFormFile Foto2 { get; set; }
     }
+
    
 }
