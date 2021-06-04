@@ -24,9 +24,9 @@
                 <span asp-validation-for="ReleaseDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Genre" class="control-label"></label>
-                <input asp-for="Genre" class="form-control" />
-                <span asp-validation-for="Genre" class="text-danger"></span>
+                <label asp-for="District" class="control-label"></label>
+                <input asp-for="District" class="form-control" />
+                <span asp-validation-for="District" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Rating" class="control-label"></label>
@@ -45,6 +45,53 @@
                 <input asp-for="Floor" class="form-control" />
                 <span asp-validation-for="Floor" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="Floors" class="control-label"></label>
+                <input asp-for="Floors" class="form-control" />
+                <span asp-validation-for="Floors" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="About" class="control-label"></label>
+                <input asp-for="About" class="form-control" />
+                <span asp-validation-for="About" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FonNamber" class="control-label"></label>
+                <input asp-for="FonNamber" class="form-control" />
+                <span asp-validation-for="FonNamber" class="text-danger"></span>
+
+
+
+
+            </div>
+            <table>
+            <tr>
+            <td>
+                @if (Model.Foto != null)
+                {
+                    <img style='width:100px; height:80px;' src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Foto))" />
+                }
+            </td>
+            <td>
+                @if (Model.Foto1 != null)
+                {
+                    <img style='width:100px; height:80px;' src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Foto1))" />
+                }
+            </td>
+            <td>
+                @if (Model.Foto2 != null)
+                {
+                    <img style='width:100px; height:80px;' src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Foto2))" />
+                }
+            </td>
+
+            </tr>
+            </table>
 
 
             <div class="form-group">

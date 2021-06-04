@@ -18,6 +18,21 @@ using System.IO;
 using System.Web;
 using Microsoft.AspNetCore.Http;
 using MvcMovie.Controllers;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+
+
+using System.Web;
+//using System.W;
+
+
+
+using System.IO;
+
 
 
 
@@ -46,7 +61,7 @@ namespace MvcMovie.Controllers
         }
         */
         // GET: Movies
-        public async Task<IActionResult> Index(string movieGenre, string movieRating, int moviePrice, int moviePriceL, 
+        public async Task<IActionResult> Index(string movieDistrict, string movieRating, int moviePrice, int moviePriceL, 
             int movieFloor,int movieFloorL, DateTime movieReleaseDate,  string searchString, string sortOrder)
         {
             
@@ -60,9 +75,9 @@ namespace MvcMovie.Controllers
 
 
             // Use LINQ to get list of genres.
-            IQueryable<string> genreQuery = from m in _context.Movie
-                                            orderby m.Genre
-                                            select m.Genre;
+            IQueryable<string> districtQuery = from m in _context.Movie
+                                            orderby m.District
+                                            select m.District;
 
             IQueryable<string> ratingQuery = from m in _context.Movie
                                             orderby m.Rating
@@ -89,10 +104,14 @@ namespace MvcMovie.Controllers
                                             select m.Price;
 
 
+            IQueryable<string> fonNamberQuery = from m in _context.Movie
+                                                orderby m.FonNamber
+                                                select m.FonNamber;
+
             var movies = from m in _context.Movie
                          select m;
 
-            //sort tach url
+           
 
            
       
@@ -102,12 +121,36 @@ namespace MvcMovie.Controllers
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                movies = movies.Where(s => s.Title.Contains(searchString));
+                movies = movies.Where(m => m.Title.Contains(searchString)
+                                         || m.District.Contains(searchString)
+                                         || m.FonNamber.Contains(searchString)
+                                      );
+
+                //movies = movies.Where(m => m.District.Contains(searchString)
+                //                       || m.Title.Contains(searchString)
+                //                       || m.Name.Contains(searchString)
+                //                       || m.FonNamber.ToString().Contains(searchString)
+
+                //                       );
+
+
             }
 
-            if (!string.IsNullOrEmpty(movieGenre))
+            /*
+             
+            || s.FonNamber.Contains(searchString)
+
+             if (!String.IsNullOrEmpty(searchString))
             {
-                movies = movies.Where(x => x.Genre == movieGenre);
+                students = students.Where(s => s.LastName.Contains(searchString)
+                                       || s.FirstMidName.Contains(searchString));
+            }
+
+            */
+
+            if (!string.IsNullOrEmpty(movieDistrict))
+            {
+                movies = movies.Where(x => x.District == movieDistrict);
             }
 
             if (!string.IsNullOrEmpty(movieRating))
@@ -151,24 +194,29 @@ namespace MvcMovie.Controllers
                 movies = movies.Where(x => x.ReleaseDate == movieReleaseDate);
             }
 
-
+            //sort tach url
             //sort by clic colum
 
 
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            // ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
 
+            ViewData["StritSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
 
             ViewData["PriceSortParm"] = sortOrder == "Price" ? "price_desc" : "Price";
 
-            ViewData["GanreSortParm"] = sortOrder == "Ganre" ? "ganre_desc" : "Ganre";
+            ViewData["DistrictSortParm"] = sortOrder == "District" ? "district_desc" : "District";
 
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
 
 
 
             switch (sortOrder)
+
+
             {
-                case "name_desc":
+
+
+               case "name_desc":
                    
                     movies = movies.OrderByDescending(m => m.Title);
                     break;
@@ -189,12 +237,12 @@ namespace MvcMovie.Controllers
                     movies = movies.OrderByDescending(m => m.ReleaseDate);
                     break;
 
-                case "Ganre":
-                    movies = movies.OrderBy(m => m.Genre);
+                case "District":
+                    movies = movies.OrderBy(m => m.District);
                     break;
 
-                case "ganre_desc":
-                    movies = movies.OrderByDescending(m => m.Genre);
+                case "district_desc":
+                    movies = movies.OrderByDescending(m => m.District);
                     break;
 
 
@@ -204,6 +252,9 @@ namespace MvcMovie.Controllers
                 default:
                     movies = movies.OrderBy(m => m.Title);
                     break;
+
+              
+
             }
 
 
@@ -224,7 +275,7 @@ namespace MvcMovie.Controllers
 
             //var movieRatingVM = new MovieGenreViewModel
             {
-                Genres = new SelectList(await genreQuery.Distinct().ToListAsync()),
+                District = new SelectList(await districtQuery.Distinct().ToListAsync()),
 
                 Rating = new SelectList(await ratingQuery.Distinct().AsNoTracking().ToListAsync()),
 
@@ -299,6 +350,101 @@ namespace MvcMovie.Controllers
 
 
         // GET: Movies/Create
+        public IActionResult CreateF()
+        {
+            return View();
+        }
+
+        public IActionResult CreateK()
+        {
+            return View();
+        }
+        
+
+
+
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateF([Bind("Id,Title, Foto")] Movie movie, MovieGenreViewModel movieGenreViewModel, IFormFile Foto)
+
+
+        {
+
+
+
+
+            //if (ModelState.IsValid)
+            //{
+
+                if (movieGenreViewModel.Foto[1] != null)
+                {
+                    byte[] imageData = null;
+                    // считываем переданный файл в массив байтов
+                    using (var binaryReader = new BinaryReader(movieGenreViewModel.Foto[1].OpenReadStream()))
+                    {
+                        imageData = binaryReader.ReadBytes((int)movieGenreViewModel.Foto[1].Length);
+                    }
+                    // установка массива байтов
+                    movie.Foto = imageData;
+                }
+
+                //if (Foto != null)
+
+                //{
+                //    if (Foto.Length > 0)
+
+                //    //Convert Image to byte and save to database
+
+                //    {
+
+                //        byte[] p1 = null;
+                //        using (var fs1 = Foto.OpenReadStream())
+                //        using (var ms1 = new MemoryStream())
+                //        {
+                //            fs1.CopyTo(ms1);
+                //            p1 = ms1.ToArray();
+                //        }
+                //        movie.Foto = p1;
+
+                //    }
+                //}
+
+
+
+
+
+
+                // byte[] imageData = null;
+                // // считываем переданный файл в массив байтов
+                // using (var binaryReader = new BinaryReader(Foto.OpenReadStream()))
+                // {
+                //     imageData = binaryReader.ReadBytes((int)Foto.Length);
+                // }
+                // // установка массива байтов
+                //movie.Foto = imageData;
+
+                //using (var ms = new MemoryStream())
+                //{
+                //    Foto.CopyTo(ms);
+                //    movie.Foto = ms.ToArray();
+                //}
+
+
+                _context.Add(movie);
+                //_context.SaveChanges();
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            
+
+           // return View(movie);
+        }
+
+
+
+
         public IActionResult Create()
         {
             return View();
@@ -309,13 +455,259 @@ namespace MvcMovie.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,ReleaseDate,Genre,Price,Rating,Floor")] Movie movie)
+        public async Task<IActionResult> Create([Bind("Id,Title,ReleaseDate,District,Price,Rating,Floor,Name," +
+            "FonNamber,Floors,Qf,About, Name,Nstreat,Foto")] Movie movie ,MovieGenreViewModel movieGenreViewModel)
         {
+
+
+
+
             if (ModelState.IsValid)
             {
-               
+                //if (movieGenreViewModel.Foto == null || movieGenreViewModel.Foto[0].Length == 0)
+                //if (movieGenreViewModel.Foto == null)
+                //{
+
+                //    byte[] p1 = null;
+
+
+                //    movie.Foto = p1;
+
+                //    return View(movie);
+                //}
+                //if (movieGenreViewModel.Foto[1] == null)
+                //{
+
+                //    byte[] p1 = null;
+
+
+                //    movie.Foto1 = p1;
+
+                //}
+                //if (movieGenreViewModel.Foto[2] == null)
+                //{
+
+                //    byte[] p1 = null;
+
+
+                //    movie.Foto2 = p1;
+
+                //}
+
+                ////return View(movie);;
+                //if (movieGenreViewModel.Foto[1] == null || movieGenreViewModel.Foto[1].Length == 0)
+                //{
+
+                //    byte[] p2 = null;
+
+
+                //    movie.Foto1 = p2;
+
+                //}
+
+
+                //if (movieGenreViewModel.Foto[2] == null || movieGenreViewModel.Foto[0].Length == 0)
+                //{
+
+                //    byte[] p3 = null;
+
+
+                //    movie.Foto2 = p3;
+
+                //}
+
+                //List<IFormFile> Foto = new List<IFormFile>();
+
+
+                //var F = movieGenreViewModel?.Foto[0];
+                //var F1 = movieGenreViewModel?.Foto[1];
+                //var F2 = movieGenreViewModel?.Foto[2];
+
+
+                //var F = movie?.Foto;
+                //var F1 = movie?.Foto;
+                //var F2 = movie?.Foto;
+
+
+                //var F = movieGenreViewModel?.Foto;
+                //var F1 = movieGenreViewModel?.Foto;
+                //var F2 = movieGenreViewModel?.Foto;
+
+                for (int i = 0; i < movieGenreViewModel?.Foto?.Count; i++)
+                {
+                    //if (movieGenreViewModel?.Foto[i] != null )
+
+                    {
+
+
+                        byte[] imageData = null;
+                        // считываем переданный файл в массив байтов
+                        using (var binaryReader = new BinaryReader(movieGenreViewModel.Foto[i].OpenReadStream()))
+                        {
+                            imageData = binaryReader.ReadBytes((int)movieGenreViewModel.Foto[i].Length);
+                        }
+                        // установка массива байтов
+
+                        if (i == 0)
+                        {
+                            movie.Foto = imageData;
+                        }
+
+                        if (i == 1)
+                        {
+                            movie.Foto1 = imageData;
+                        }
+
+                        if (i == 2)
+                        {
+                            movie.Foto2 = imageData;
+                        }
+
+                    }
+                }
+
+
+                /*
+
+                if (movieGenreViewModel?.Foto[0] != null && movieGenreViewModel?.Foto!=null)                //if (F!=null)
+
+
+                {
+
+
+                    byte[] imageData = null;
+                    // считываем переданный файл в массив байтов
+                    using (var binaryReader = new BinaryReader(movieGenreViewModel.Foto[0].OpenReadStream()))
+                    {
+                        imageData = binaryReader.ReadBytes((int)movieGenreViewModel.Foto[0].Length);
+                    }
+                    // установка массива байтов
+                    movie.Foto = imageData;
+
+                }
+
+
+                
+                if (movieGenreViewModel?.Foto[1] != null)
+
+               // if (F1 != null)
+                {
+
+
+                    byte[] imageData = null;
+                    // считываем переданный файл в массив байтов
+                    using (var binaryReader = new BinaryReader(movieGenreViewModel.Foto[1].OpenReadStream()))
+                    {
+                        imageData = binaryReader.ReadBytes((int)movieGenreViewModel.Foto[1].Length);
+                    }
+                    // установка массива байтов
+                    movie.Foto1 = imageData;
+
+                }
+                //if (movieGenreViewModel?.Foto[2]!=null )
+                //{
+
+                //    movie.Foto2 = null;
+
+                //}
+
+
+                if (movieGenreViewModel?.Foto[2] != null || movieGenreViewModel.Foto[2].Length != 0)
+
+                //if (F2 != null)
+                {
+
+
+                    byte[] imageData = null;
+                    // считываем переданный файл в массив байтов
+                    using (var binaryReader = new BinaryReader(movieGenreViewModel.Foto[2].OpenReadStream()))
+                    {
+                        imageData = binaryReader.ReadBytes((int)movieGenreViewModel.Foto[2].Length);
+                    }
+                    // установка массива байтов
+                    movie.Foto2 = imageData;
+
+                }
+
+                else
+                {
+
+                    movie.Foto2 = null;
+
+                }
+
+                */
+
+                //else
+                //{
+                //    //does not update the image
+                //}
+
+
+                //if (movieGenreViewModel.Foto[2] == null || movieGenreViewModel.Foto[2].Length == 0)
+                //{
+                //    ModelState.AddModelError("", "No file selected");
+                //    return View(movie);
+                //}
+
+                //if (movieGenreViewModel.Foto[2].Length < 0)
+
+                //{
+
+
+
+                //    byte[] p1 = null;
+
+
+                //    movie.Foto2 = p1;
+
+
+
+                //}
+                //if (Foto != null)
+
+                //{
+                //    if (Foto.Length > 0)
+
+                //    //Convert Image to byte and save to database
+
+                //    {
+
+                //        byte[] p1 = null;
+                //        using (var fs1 = Foto.OpenReadStream())
+                //        using (var ms1 = new MemoryStream())
+                //        {
+                //            fs1.CopyTo(ms1);
+                //            p1 = ms1.ToArray();
+                //        }
+                //        movie.Foto = p1;
+
+                //    }
+                //}
+
+
+
+
+
+
+                // byte[] imageData = null;
+                // // считываем переданный файл в массив байтов
+                // using (var binaryReader = new BinaryReader(Foto.OpenReadStream()))
+                // {
+                //     imageData = binaryReader.ReadBytes((int)Foto.Length);
+                // }
+                // // установка массива байтов
+                //movie.Foto = imageData;
+
+                //using (var ms = new MemoryStream())
+                //{
+                //    Foto.CopyTo(ms);
+                //    movie.Foto = ms.ToArray();
+                //}
+
 
                 _context.Add(movie);
+                //_context.SaveChanges();
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -344,7 +736,10 @@ namespace MvcMovie.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ReleaseDate,Genre,Price,Rating,Fllor")] Movie movie)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ReleaseDate,District,Title,Nstreat,Rating,Qf,Floor,Floors" +
+            " Price,About,Name,FonNamber")] Movie movie)
+
+        //int id, [Bind("Id,Title,ReleaseDate,District,Price,Rating,Fllor")] Movie movie)
         {
             if (id != movie.Id)
             {
